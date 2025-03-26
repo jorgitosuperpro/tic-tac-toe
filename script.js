@@ -1,43 +1,49 @@
 const gameboard = (function createGameboard() {
-    let grid = [];
-    for (let i = 1; i < 10; i++) {
-        grid.push(createCell(i));
-    }    
+    let grid = [[], [], []];
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            grid[i][j] = createCell(i,j);
+        }
+    }
 
     const winCondition = false;
     const getGrid = () => grid;
     const printGrid = function() {
         let grid_string = "";
-        let i = 0;
-        gameboard.getGrid().forEach(cell => {
-            if(i === 3 | i === 6) {
-                grid_string += "\n";
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                grid_string += grid[i][j].state;
             }
-            grid_string += cell.state;
-            i++;
-        });
+            grid_string += "\n";
+        }
         return console.log(grid_string);
     }
 
     const draw = function(player1, player2) {
-        const position = prompt("Tell which cell to draw: 1-9");
-        if (grid[position-1].state === "-") {
+        const position_row = prompt("Tell which row to draw: 0-2");
+        const position_column = prompt("Tell which columnt to draw: 0-2");
+        if (grid[position_row][position_column].state === "-") {
             if (player1.myTurn) {
-                grid[position-1].state = player1.my_symbol;
+                grid[position_row][position_column].state = player1.my_symbol;
                 printGrid(); 
             } else {
-                grid[position-1].state = player2.my_symbol;
+                grid[position_row][position_column].state = player2.my_symbol;
                 printGrid(); 
             }
         }else {
             console.log("You can't draw this cell.")
         }
     }
-    return {getGrid, printGrid, draw, winCondition};
+
+    const checkWinCondition = function(player) {
+
+        return winCondition;
+    }
+    return {getGrid, printGrid, draw, winCondition, checkWinCondition};
 })();
 
-function createCell(i) {
-    const cell_id = i;
+function createCell(i,j) {
+    const cell_id = ""+ i + j;
     const state = "-";
 
     return {cell_id, state};
@@ -58,18 +64,21 @@ const player2 = createPlayer("2", "X");
 
 player1.myTurn = true;
 gameboard.printGrid();
+
 while(gameboard.winCondition === false) {
     if (player1.myTurn === true) {
         gameboard.draw(player1, player2);
         player1.myTurn = false;
         player2.myTurn = true;
-        console.log("State of Player's 1 turn: " + player1.myTurn)
-        console.log("State of Player's 2 turn: " + player2.myTurn)
+        gameboard.checkWinCondition(player1);
+        // console.log("State of Player's 1 turn: " + player1.myTurn)
+        // console.log("State of Player's 2 turn: " + player2.myTurn)
     } else if (player2.myTurn === true) {
         gameboard.draw(player1, player2);
         player2.myTurn = false;
         player1.myTurn = true;
-        console.log("State of Player's 1 turn: " + player1.myTurn)
-        console.log("State of Player's 2 turn: " + player2.myTurn)
+        gameboard.checkWinCondition(player2);
+        // console.log("State of Player's 1 turn: " + player1.myTurn)
+        // console.log("State of Player's 2 turn: " + player2.myTurn)
     }
 }
