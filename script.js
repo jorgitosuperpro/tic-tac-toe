@@ -50,6 +50,52 @@ const gameboard = (function createGameboard() {
                 break;
             }
         }
+        //check vertical
+        for (let i =0; i < 3; i++) {
+            let isMySymbol = false;
+            for(let j = 0; j < 3; j++) {
+                if (grid[j][i].state === player.my_symbol) {
+                    isMySymbol = true;
+                } else {
+                    isMySymbol = false;
+                    break;
+                }
+            }
+            if (isMySymbol === true) {
+                gameboard.winCondition = true;
+                console.log(player.game_name + " wins.")
+                break;
+            }
+        }
+        //check diagonal left 
+        let isMySymbol = false;
+        for (let i = 0; i < 3; i++) {
+            if (grid[i][i].state === player.my_symbol) {
+                isMySymbol = true;
+            } else {
+                isMySymbol = false;
+                break;
+            }
+        }
+        if (isMySymbol === true) {
+            gameboard.winCondition = true;
+            console.log(player.game_name + " wins.")
+        } else {
+            //check diagonal right
+            isMySymbol = false;
+            for (let i = 2; i >= 0; i--) {
+                if (grid[2-i][i].state === player.my_symbol) {
+                    isMySymbol = true;
+                } else {
+                    isMySymbol = false;
+                    break;
+                }
+            }
+            if (isMySymbol === true) {
+                gameboard.winCondition = true;
+                console.log(player.game_name + " wins.")
+            }
+        }
     }
     return {getGrid, printGrid, draw, winCondition, checkWinCondition};
 })();
