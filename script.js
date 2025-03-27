@@ -5,11 +5,10 @@ const gameboard = (function createGameboard() {
             grid[i][j] = createCell(i,j);
         }
     }
-
-    const winCondition = false;
+    let winCondition = false;
     const getGrid = () => grid;
     const printGrid = function() {
-        let grid_string = "";
+    let grid_string = "";
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 grid_string += grid[i][j].state;
@@ -18,7 +17,6 @@ const gameboard = (function createGameboard() {
         }
         return console.log(grid_string);
     }
-
     const draw = function(player1, player2) {
         const position_row = prompt("Tell which row to draw: 0-2");
         const position_column = prompt("Tell which columnt to draw: 0-2");
@@ -34,10 +32,24 @@ const gameboard = (function createGameboard() {
             console.log("You can't draw this cell.")
         }
     }
-
     const checkWinCondition = function(player) {
-
-        return winCondition;
+        //check horizontal
+        for (let i =0; i < 3; i++) {
+            let isMySymbol = false;
+            for(let j = 0; j < 3; j++) {
+                if (grid[i][j].state === player.my_symbol) {
+                    isMySymbol = true;
+                } else {
+                    isMySymbol = false;
+                    break;
+                }
+            }
+            if (isMySymbol === true) {
+                gameboard.winCondition = true;
+                console.log(player.game_name + " wins.")
+                break;
+            }
+        }
     }
     return {getGrid, printGrid, draw, winCondition, checkWinCondition};
 })();
@@ -71,14 +83,10 @@ while(gameboard.winCondition === false) {
         player1.myTurn = false;
         player2.myTurn = true;
         gameboard.checkWinCondition(player1);
-        // console.log("State of Player's 1 turn: " + player1.myTurn)
-        // console.log("State of Player's 2 turn: " + player2.myTurn)
     } else if (player2.myTurn === true) {
         gameboard.draw(player1, player2);
         player2.myTurn = false;
         player1.myTurn = true;
         gameboard.checkWinCondition(player2);
-        // console.log("State of Player's 1 turn: " + player1.myTurn)
-        // console.log("State of Player's 2 turn: " + player2.myTurn)
     }
 }
