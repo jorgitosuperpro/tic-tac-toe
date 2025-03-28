@@ -1,12 +1,20 @@
+//create gameboard
 const gameboard = (function createGameboard() {
+    //grid variable is block scope so i cant target within global
     let grid = [[], [], []];
-    for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-            grid[i][j] = createCell(i,j);
+    //i create 2d grid 3x3 in each element i have a cell object
+    const initial_grid = function() {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                grid[i][j] = createCell(i,j);
+            }
         }
     }
+    //i establish wincondition false cause start of the game
     let winCondition = false;
+    //retrieve grid for later ui development
     const getGrid = () => grid;
+    //print grid for console
     const printGrid = function() {
     let grid_string = "";
         for (let i = 0; i < 3; i++) {
@@ -17,6 +25,7 @@ const gameboard = (function createGameboard() {
         }
         return console.log(grid_string);
     }
+    //draw function to mark cells depending on which player's turn
     const draw = function(player1, player2) {
         const position_row = prompt("Tell which row to draw: 0-2");
         const position_column = prompt("Tell which columnt to draw: 0-2");
@@ -32,6 +41,7 @@ const gameboard = (function createGameboard() {
             console.log("You can't draw this cell.")
         }
     }
+    //check if someone has win
     const checkWinCondition = function(player) {
         //check horizontal
         for (let i =0; i < 3; i++) {
@@ -46,6 +56,7 @@ const gameboard = (function createGameboard() {
             }
             if (isMySymbol === true) {
                 gameboard.winCondition = true;
+                player.giveWins();
                 console.log(player.game_name + " wins.")
                 break;
             }
@@ -63,6 +74,7 @@ const gameboard = (function createGameboard() {
             }
             if (isMySymbol === true) {
                 gameboard.winCondition = true;
+                player.giveWins();
                 console.log(player.game_name + " wins.")
                 break;
             }
@@ -79,6 +91,7 @@ const gameboard = (function createGameboard() {
         }
         if (isMySymbol === true) {
             gameboard.winCondition = true;
+            player.giveWins();
             console.log(player.game_name + " wins.")
         } else {
             //check diagonal right
@@ -93,11 +106,20 @@ const gameboard = (function createGameboard() {
             }
             if (isMySymbol === true) {
                 gameboard.winCondition = true;
+                player.giveWins();
                 console.log(player.game_name + " wins.")
             }
         }
+        //is it a tie?
+        let isATie = false;
+        isATie = gameboard.getGrid().every(row => row.every(cell => cell.state != "-"));
+        if (isATie) gameboard.winCondition = true;
     }
-    return {getGrid, printGrid, draw, winCondition, checkWinCondition};
+    //reset grid
+    const reset = ()=> initial_grid();
+    //continue another game
+    const nextGame = () => winCondition = false;
+    return {getGrid, initial_grid, printGrid, draw, winCondition, checkWinCondition, reset, nextGame};
 })();
 
 function createCell(i,j) {
@@ -119,20 +141,25 @@ function createPlayer(name, symbol) {
 
 const player1 = createPlayer("1", "O");
 const player2 = createPlayer("2", "X");
-
-player1.myTurn = true;
-gameboard.printGrid();
-
-while(gameboard.winCondition === false) {
-    if (player1.myTurn === true) {
-        gameboard.draw(player1, player2);
-        player1.myTurn = false;
-        player2.myTurn = true;
-        gameboard.checkWinCondition(player1);
-    } else if (player2.myTurn === true) {
-        gameboard.draw(player1, player2);
-        player2.myTurn = false;
-        player1.myTurn = true;
-        gameboard.checkWinCondition(player2);
+nextGame();
+function nextGame() {
+    gameboard.initial_grid();
+    player1.myTurn = true;
+    gameboard.printGrid();
+    gameboard.winCondition = false;
+    gameboard.reset();
+    while(gameboard.winCondition === false) {
+        if (player1.myTurn === true) {
+            gameboard.draw(player1, player2);
+            player1.myTurn = false;
+            player2.myTurn = true;
+            gameboard.checkWinCondition(player1);
+        } else if (player2.myTurn === true) {
+            gameboard.draw(player1, player2);
+            player2.myTurn = false;
+            player1.myTurn = true;
+            gameboard.checkWinCondition(player2);
+        }
     }
 }
+
