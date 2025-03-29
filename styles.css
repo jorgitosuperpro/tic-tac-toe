@@ -1,0 +1,47 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: 'MyWebFont';
+}
+
+@font-face {
+    font-family: 'MyWebFont';
+    src: local('opensans'), 
+    url(fonts/OpenSans-VariableFont_wdth\,wght.ttf) format('truetype');
+}
+
+body {
+    display: grid;
+    grid-template-rows: 0.2fr 1fr;
+    gap: 50px;
+}
+
+.header {
+    height: 100px;
+    text-align: center;
+    padding-top: 50px;
+    font-weight: bold;
+    font-size: 2em;
+    background-color: #FA8BA3;
+    grid-row: 1/2;
+    color: #FFF2F4;
+}
+
+.main-content {
+    height: 600px;
+    width: 600px;
+    margin: 0 auto;
+    padding-top: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 5px 5px rgba(182, 182, 182, 0.75);
+    background-color: #FEBFC9;
+    color: #FFF2F4;
+}
+
+.grid {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    font-size: 32px;
+}
