@@ -9,6 +9,7 @@ const gameboard = (function createGameboard() {
                 grid[i][j] = createCell(i,j);
             }
         }
+        return grid;
     }
     //i establish wincondition false cause start of the game
     let winCondition = false;
@@ -27,8 +28,8 @@ const gameboard = (function createGameboard() {
     }
     //draw function to mark cells depending on which player's turn
     const draw = function(player1, player2) {
-        const position_row = prompt("Tell which row to draw: 0-2");
-        const position_column = prompt("Tell which columnt to draw: 0-2");
+        let position_row = prompt("Tell which row to draw: 0-2");
+        let position_column = prompt("Tell which columnt to draw: 0-2");
         if (grid[position_row][position_column].state === "-") {
             if (player1.myTurn) {
                 grid[position_row][position_column].state = player1.my_symbol;
@@ -139,6 +140,7 @@ function createPlayer(name, symbol) {
     return {game_name, my_symbol, getWins, giveWins, myTurn};
 }
 
+//DOM
 const player1 = createPlayer("1", "O");
 const player2 = createPlayer("2", "X");
 nextGame();
@@ -149,6 +151,7 @@ function nextGame() {
     gameboard.winCondition = false;
     gameboard.reset();
     while(gameboard.winCondition === false) {
+        createDisplay();
         if (player1.myTurn === true) {
             gameboard.draw(player1, player2);
             player1.myTurn = false;
@@ -163,3 +166,20 @@ function nextGame() {
     }
 }
 
+
+function createDisplay() {
+    const main_content = document.querySelector(".main-content");
+    const display = document.createElement("div");
+    main_content.appendChild(display);
+    display.setAttribute("class", "gameboard");
+    let displayGrid = document.createElement("div");
+    displayGrid.innerHTML = "";
+    displayGrid.setAttribute("class", "grid");
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            displayGrid.innerHTML += gameboard.getGrid()[i][j].state;
+        }
+        displayGrid.innerHTML += "<br>";
+    }
+    display.appendChild(displayGrid);
+}
