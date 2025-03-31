@@ -12,14 +12,14 @@
 
 body {
     display: grid;
-    grid-template-rows: 0.2fr 1fr;
+    grid-template-rows: 0.2fr 0.05fr 1fr;
     gap: 50px;
 }
 
 .header {
-    height: 100px;
+    height: 70px;
     text-align: center;
-    padding-top: 50px;
+    padding-top: 30px;
     font-weight: bold;
     font-size: 2em;
     background-color: #FA8BA3;
@@ -27,8 +27,17 @@ body {
     color: #FFF2F4;
 }
 
+.leaderboard {
+    grid-row: 2/3;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    color: #FA8BA3;
+}
+
 .main-content {
-    height: 600px;
+    grid-row: 3/4;
+    height: 620px;
     width: 600px;
     margin: 0 auto;
     padding-top: 20px;
@@ -39,9 +48,47 @@ body {
     color: #FFF2F4;
 }
 
-.grid {
-    width: 200px;
-    height: 200px;
+:root {
+    /* default value, will override on #container */
+    --grid-cols: 1;
+    --grid-rows: 1;
+  }
+
+.gameboard {
+    display: grid;
+    width: 500px;
+    height: 500px;
     margin: 0 auto;
-    font-size: 32px;
+    margin-top: 20px;
+    grid-template-rows: repeat(var(--grid-rows), 1fr);
+    grid-template-columns: repeat(var(--grid-cols), 1fr);
 }
+
+.grid-item {
+    padding: 0.2em;
+    border: 3px double #FA8BA3;
+    font-size: 2em;
+    text-align: center;
+  }
+
+div img {
+    height: 100%;
+}
+
+.reset {
+    border-style: none;
+    background-color: #FA8BA3;
+    margin-top: 15px;
+    width: 150px;
+    height: 40px;
+    color: #FFF2F4;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.reset:hover {
+    background-color: #FFF2F4;
+    border-color: #FA8BA3;
+    color: #FA8BA3;
+}
+
